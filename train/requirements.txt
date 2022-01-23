@@ -2,5 +2,6 @@ t5
 tensorflow-datasets
 tensorflow-text
 tensorboard
+cloud-tpu-profiler
 google-cloud-storage
 termcolor
