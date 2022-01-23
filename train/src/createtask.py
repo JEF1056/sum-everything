@@ -1,16 +1,11 @@
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
-
 import t5
 import seqio
-import logging
 import functools
 from termcolor import cprint
 from google.cloud import storage
 import tensorflow.compat.v1 as tf
 import tensorflow_datasets as tfds
-
-logging.getLogger("tensorflow").setLevel(logging.ERROR)
 
 DEFAULT_OUTPUT_FEATURES = {
     "inputs":

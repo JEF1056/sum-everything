@@ -2,12 +2,14 @@ import os
 import sys
 import json
 import seqio
+import logging
 import warnings
 import argparse
 import statistics
 import importlib.util
 import tensorflow_datasets as tfds
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+logging.getLogger("tensorflow").setLevel(logging.ERROR)
 warnings.filterwarnings("ignore")
 
 parser = argparse.ArgumentParser(description='Get dataset statstics')

@@ -28,7 +28,7 @@ parser.add_argument('-datasets', nargs='+', type=str, required=True,
 parser.add_argument('-gpus', nargs='+', type=str, default=None,
                     help='Available GPUs. Input format: "-gpus gpu:0 gpu:1 "...')
 parser.add_argument('-tpu', type=str, default=None,
-                    help='TPU ip address. None if using GPU. local if TPU is attacked to the local instance.')
+                    help='TPU ip address. None if using GPU. local if TPU is attached to the local instance.')
 parser.add_argument('-tpu_topology', type=str, default=None, choices=["v2-8","v3-8", None],
                     help='TPU type. None if using GPU')
 parser.add_argument('-in_len', type=int, default=2048,
