@@ -131,6 +131,7 @@ dmypy.json
 # Do not commit raw dataset files
 datasets*
 data/cnn*
+data/idt*
 data/scisummnet*
 train/models*
 train/export*
