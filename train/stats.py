@@ -54,6 +54,8 @@ print("Dataset creation complete.")
 
 t_in, t_out=[], []
 for sample in train:
+    if len(sample["inputs"]) <= 100:
+        print(f"\n{sample}\n")
     t_in.append(len(sample["inputs"]))
     t_out.append(len(sample["targets"]))
 

@@ -119,7 +119,7 @@ if args.batch_size: train_batch_size=args.batch_size
 if args.max_checkpoints: keep_checkpoint_max=args.max_checkpoints
 
 tf.io.gfile.makedirs(MODEL_DIR)
-# The models from our paper are based on the Mesh Tensorflow Transformer.
+
 if args.tpu:
     model = t5.models.MtfModel(
         model_dir=MODEL_DIR,
