@@ -1,3 +1,5 @@
+.PHONY : install tpu
+
 install:
 	sudo apt update
 	sudo apt upgrade -y
