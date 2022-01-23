@@ -57,7 +57,7 @@ def dataset_fn(split, shuffle_files=False):
     client = storage.Client()
     global splits, bucket, compressiontype
     # Load lines from the text file as examples.
-    files_to_read=[os.path.join("gs://"+bucket,str(filename.name)) for filename in client.list_blobs(bucket, prefix=splits[split])]
+    files_to_read=[os.path.join(bucket,str(filename.name)) for filename in client.list_blobs(bucket, prefix=splits[split])]
     cprint(f"Split {split} contains {len(files_to_read)} shards:\nFirst 10: {files_to_read[0:10]}", 'cyan', attrs=['bold'])
     ds = tf.data.TextLineDataset(files_to_read, compression_type=compressiontype).filter(lambda line:tf.not_equal(tf.strings.length(line),0))
     # Split each "<question>\t<answer>" example into (question, answer) tuple.
