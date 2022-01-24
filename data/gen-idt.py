@@ -1,6 +1,7 @@
 import os
 import io
 import csv
+import tqdm
 import gdown
 import random
 import subprocess
@@ -23,7 +24,7 @@ try: os.makedirs(OUT)
 except FileExistsError: pass
 outputs={split:io.open(os.path.join(OUT,f"{PREFIX}.{split}"), mode="w", encoding="utf-8") for split in splits}
 
-for filename in files:
+for filename in tqdm(files):
     with io.open(os.path.join(IN, filename), mode="r", encoding = "ISO-8859-1") as csv_file:
         csv_reader = csv.reader(csv_file)
         for row in csv_reader:
