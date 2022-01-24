@@ -28,6 +28,7 @@ for filename in tqdm.tqdm(files):
     with io.open(os.path.join(IN, filename), mode="r", encoding = "ISO-8859-1") as csv_file:
         csv_reader = csv.reader(csv_file)
         for row in csv_reader:
+            if row[0] == "author": continue
             try: outputs[random.choices(splits, weights = [80, 20])[0]].write(f"{clean(row[4])}\t{clean(row[5])}\n")
             except IndexError: continue # skip empty entries
 
