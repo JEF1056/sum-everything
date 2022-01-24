@@ -5,6 +5,7 @@ import gdown
 import random
 import subprocess
 from tqdm import tqdm
+import multiprocessing
 import concurrent.futures
 from src.helpers import clean
 
@@ -13,7 +14,7 @@ DATA_URL = "https://docs.google.com/uc?export=download&id=0BwmD_VLjROrfTHk4NFg2S
 IN = "cnn/stories"
 OUT = "../datasets/cnn"
 PREFIX = "cnn"
-PROCESSES = 16
+PROCESSES = multiprocessing.cpu_count()
 
 # Download and unzip the dataset
 if not os.path.exists("cnn_stories.tgz"):
@@ -43,7 +44,7 @@ except FileExistsError: pass
 outputs={split:io.open(os.path.join(OUT,f"{PREFIX}.{split}"), mode="w", encoding="utf-8") for split in splits}
 
 with concurrent.futures.ProcessPoolExecutor(max_workers=PROCESSES) as executor:
-    results = list(tqdm(executor.map(worker, split_distrib, tasks), total = len(tasks)))
+    results = list(tqdm(executor.map(worker, split_distrib, tasks), total = len(tasks), desc=f"Using {PROCESSES} Processes"))
     for result in results:
         if result != None:
             split, article, summary = result
