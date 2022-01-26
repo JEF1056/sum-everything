@@ -13,7 +13,7 @@ from tqdm import tqdm
 from src.helpers import clean
 
 DATA_URL = "http://bollin.inf.ed.ac.uk/public/direct/XSUM-EMNLP18-Summary-Data-Original.tar.gz"
-IN = "bbc-summary-data"
+IN = "xsum-summary-data"
 OUT = "../datasets/xsum"
 PREFIX = "xsum"
 PROCESSES = multiprocessing.cpu_count()
