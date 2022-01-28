@@ -23,15 +23,17 @@ if not os.path.exists(IN):
     subprocess.call(["tar", "-xf", "dailymail_stories.tgz"])
 
 # Define processor
-def postprocess(text):
+def preprocess(text):
     # This is an optional function with addional project-specific postprocessing
-    r1 = re.compile(r'\s*\(dailymail\)\s*', re.IGNORECASE)
+    r0 = re.compile(r'\n+', re.IGNORECASE | re.DOTALL)
+    r1 = re.compile(r'^.*?UPDATED:?\n|^.*?PUBLISHED:?\n|^.*?CREATED:?\n|^.*?BY\n.*?\n|^.*?Follow.*?\n|\d{2}:\d{2} [a-z]{3}, \d{1,2} [a-z]+ \d{4}', re.IGNORECASE | re.DOTALL)
+    text = re.sub(r0, "\n", text.strip())
     text = re.sub(r1, "", text.strip())
     return text.lstrip(("-!.,^# ")).strip()
 
 def worker(split, filename):
     file = io.open(os.path.join(IN, filename), mode="r", encoding="utf-8")
-    data = [postprocess(clean(part)) for part in file.read().split("@highlight\n\n")] #apply cleaning to each part
+    data = [clean(preprocess(part)) if i == 0 else clean(part) for i, part in enumerate(file.read().split("@highlight\n\n"))] #apply cleaning to each part
     if data[0] and data[1]:
         return split, data[0], "/n".join([f"- {summary}" for summary in data[1:]])
 
@@ -49,7 +51,8 @@ if __name__ == '__main__':
         for result in results:
             if result != None:
                 split, article, summary = result
-                outputs[split].write(f"{article}\t{summary}\n")
+                if len(article) > len(summary):
+                    outputs[split].write(f"{article}\t{summary}\n")
 
     # Close and cleanup
     for output in outputs: outputs[output].close()
