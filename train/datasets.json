@@ -82,5 +82,19 @@
         "validation_path": "bbc",
         "compression_type": null,
         "store_mode": "gs"
+    },
+    "wikiHow": {
+        "bucket_path": "../datasets",
+        "train_path": "wikiHow",
+        "validation_path": "wikiHow",
+        "compression_type": null,
+        "store_mode": "local"
+    },
+    "wikiHow_gs": {
+        "bucket_path": "gs://sum-data-eu",
+        "train_path": "wikiHow",
+        "validation_path": "wikiHow",
+        "compression_type": null,
+        "store_mode": "gs"
     }
 }
