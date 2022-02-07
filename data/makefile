@@ -6,6 +6,7 @@ build:
 	python3 gen-bbc.py
 	python3 gen-dailymail.py
 	python3 gen-tifu.py
+	python3 gen-wiki.py
 
 clean:
 	rm -rf __pycache__ __MACOSX
@@ -16,6 +17,7 @@ clean:
 	rm -rf XSUM-EMNLP18-Summary-Data-Original.tar.gz bbc-summary-data
 	rm -rf bbc.zip bbc
 	rm -rf tifu_datasets.zip tifu
+	rm -rf wikiHow.zip wikiHow
 
 spotless:
 	rm -rf __pycache__ __MACOSX
@@ -28,3 +30,4 @@ spotless:
 	rm -rf bbc.zip bbc
 	rm -rf XSUM-EMNLP18-Summary-Data-Original.tar.gz bbc-summary-data
 	rm -rf tifu_datasets.zip tifu
+	rm -rf wikiHow.zip wikiHow
