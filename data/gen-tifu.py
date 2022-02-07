@@ -21,22 +21,21 @@ if not os.path.exists(IN):
     os.mkdir(IN)
     subprocess.call(['unzip', '-o', "tifu_datasets.zip", '-d', "../data/tifu"])
 
-files = os.listdir(IN)
+file = os.listdir(IN)[0]
 splits = ["train", "validation"]
 try: os.makedirs(OUT)
 except FileExistsError: pass
 outputs={split:io.open(os.path.join(OUT,f"{PREFIX}.{split}"), mode="w", encoding="utf-8") for split in splits}
 
-count = 0
-for filename in tqdm.tqdm(files):
-    with io.open(os.path.join(IN,filename), mode="r", encoding="utf8") as f:
-        for line in f:
-            data = json.loads(line)
-            if data["tldr"]:
-                tldr = data["tldr"]
-                if data["selftext_without_tldr"]:
-                    selftext = data["selftext_without_tldr"]
-                    try: outputs[random.choices(splits, weights = [80, 20])[0]].write(f"{clean(selftext)}\t{clean(tldr)}\n")
-                    except IndexError: continue # skip empty entries
+with io.open(os.path.join(IN,file), mode="r", encoding="utf8") as f:
+
+    for line in f:
+        data = json.loads(line)
+        if data["tldr"]:
+            tldr = data["tldr"]
+            if data["selftext_without_tldr"]:
+                selftext = data["selftext_without_tldr"]
+                try: outputs[random.choices(splits, weights = [80, 20])[0]].write(f"{clean(selftext)}\t{clean(tldr)}\n")
+                except IndexError: continue # skip empty entries
 
 for output in outputs: outputs[output].close()
