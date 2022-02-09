@@ -110,6 +110,12 @@ function showSummary(summary) {
 
 // Event trigger for editing/saving text
 edit_text_toggle.addEventListener('click', () => {
+    // RML
+    console.log("*****************toggle********************")
+    console.log(edit_text_toggle.classList);
+    console.log(new_text_button.classList);
+    console.log(get_summary_button.classList);
+    // ERML
     if (edit_text_toggle.classList.contains("fa-save")) {
         let input_text = document.getElementById("input-text");
 
@@ -165,6 +171,9 @@ copy_summary_buttton.addEventListener('click', () => {
 });
 
 get_summary_button.addEventListener('click', () => {
+    // RML
+    console.log("*****************click********************")
+    console.log(get_summary_button.classList);
     let [text, _] = getArticle(current_id);
     getSummary(text).then(result => {
         if (result != null) {
