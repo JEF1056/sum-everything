@@ -2,11 +2,11 @@ import os
 import io
 import json
 import sys
-import tqdm
 import gdown
 import random
 import subprocess
 from src.helpers import clean
+import splicejsonmultipleroots
 
 DATA_URL = "https://drive.google.com/uc?export=download&id=1swS7fuzE_UMhKtcWIJdOvbgBWl8cyGjd"
 IN = "tifu"
@@ -27,15 +27,21 @@ try: os.makedirs(OUT)
 except FileExistsError: pass
 outputs={split:io.open(os.path.join(OUT,f"{PREFIX}.{split}"), mode="w", encoding="utf-8") for split in splits}
 
+lineCount = 0
 with io.open(os.path.join(IN,file), mode="r", encoding="utf8") as f:
+    for line in f: lineCount += 1
 
+splitList = random.choices(splits, weights = [80, 20], k = lineCount)
+
+with io.open(os.path.join(IN,file), mode="r", encoding="utf8") as f:
+    splitIndex = 0
     for line in f:
         data = json.loads(line)
         if data["tldr"]:
             tldr = data["tldr"]
             if data["selftext_without_tldr"]:
                 selftext = data["selftext_without_tldr"]
-                try: outputs[random.choices(splits, weights = [80, 20])[0]].write(f"{clean(selftext)}\t{clean(tldr)}\n")
-                except IndexError: continue # skip empty entries
+                outputs[splitList[splitIndex]].write(f"{clean(selftext)}\t{clean(tldr)}\n")
+        splitIndex += 1
 
 for output in outputs: outputs[output].close()
