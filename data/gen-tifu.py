@@ -1,12 +1,12 @@
 import os
 import io
-import json
 import sys
+import json
 import gdown
 import random
 import subprocess
+from tqdm import tqdm
 from src.helpers import clean
-import splicejsonmultipleroots
 
 DATA_URL = "https://drive.google.com/uc?export=download&id=1swS7fuzE_UMhKtcWIJdOvbgBWl8cyGjd"
 IN = "tifu"
@@ -35,7 +35,7 @@ splitList = random.choices(splits, weights = [80, 20], k = lineCount)
 
 with io.open(os.path.join(IN,file), mode="r", encoding="utf8") as f:
     splitIndex = 0
-    for line in f:
+    for line in tqdm(f, total = lineCount):
         data = json.loads(line)
         if data["tldr"]:
             tldr = data["tldr"]
