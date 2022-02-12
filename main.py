@@ -1,12 +1,12 @@
 '''
 Ideas:
-	- If file empty & errmsg showing do nothing? (i.e don't refresh)
+	- If file empty & errmsg showing do nothing? (i.e don't refresh) - no actually update to edit mode and do not update contents
 '''
 import re
 import os
 import requests
 import httpimport
-from flask_sock import Sock
+from flask_socketio import SocketIO
 from flask import Flask, render_template, request, make_response
 
 # Dynamically import from main branch
@@ -28,7 +28,7 @@ class ModelAPI():
         if response.status_code == 200:
             # Response cleanup
             response = response.json()['outputs']
-            print(response)
+            app.logger.info(response)
             for label in response:
                 response[label] = [parse(entry) for entry in response[label]]
 
@@ -47,12 +47,12 @@ ALLOWED_EXTENSIONS = {'txt'}
 # Flask instance; allows for instance (database) outside folder
 app = Flask(__name__, instance_relative_config=True)
 app.secret_key = os.urandom(12)
-sock = Sock(app)
+socketio = SocketIO(app)
 model_api = ModelAPI("155.248.202.186", 3000)
 
 @app.route('/', methods = ['GET'])
 def index():
-	return render_template("index-0.html")
+	return render_template("index.html")
 
 @app.route("/v1/models", methods = ['GET'])
 def get_models():
@@ -68,11 +68,10 @@ def query():
     response = model_api.query(data["input"], 1)
     return response
 
-@sock.route('/modelapi')
-def echo(request):
-    while True:
-        data = request.receive()
-        request.send(data)
+@socketio.on('message')
+def handle_message(data):
+    app.logger.info(f'received message: {data}')
+    print(f'received message: {data}')
 
 if __name__ == "__main__":
-    app.run()
+    app.run(port=7000)
