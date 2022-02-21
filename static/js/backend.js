@@ -51,6 +51,9 @@ socket.on('model_ack', function(data) {
 
 socket.on('model_response', function(data) {
     let [msg, color, icon] = [data["message"], data["color"], data["icon"]]
+    // enabling get summary button after the query
+    get_summary_button.classList.remove("pointer-events-none");
+    get_summary_button.classList.remove("opacity-50");
     switch (data['status']) {
         case 'success':
             showAlert(summary_alert, msg, color, icon, 18000);
