@@ -1,5 +1,3 @@
-
-
 function getModels() {
     available_models.innerHTML = "";
     fetch("/v1/models")
@@ -29,9 +27,9 @@ function getModels() {
 function getSummary(model, input) {
     if (socket_available) {
         socket_available = false;
-        socket.emit('query', {
-            "model": model,
-            "input": input
+        socket.emit("query", {
+            model: model,
+            input: input,
         });
     }
 }
