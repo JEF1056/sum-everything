@@ -75,3 +75,6 @@ let multinewline = /\n+/g;
 let numcol = /grid-cols-\d/g;
 let textcolor400 = /text-(.*?)-400/g;
 let iconfa = /fa-.+/g;
+
+// Prevent multi query
+socket_available = true;

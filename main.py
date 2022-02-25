@@ -68,24 +68,29 @@ def get_models():
             ret[model] = True
     return ret
 
+occupied_sockets = set()
 @socketio.on('query')
 def query(data):
-    model, inputs = data["model"], data["input"]
-    emit('model_ack', dict(status="received", **acks["received"]))
-    inputs = clean(inputs)
-    emit('model_ack', dict(status="cleaned", inputs=inputs.replace("/n", "\n"), **acks["cleaned"]))
-    data = {"inputs": [inputs]}
-    response = requests.post(f"{MODEL_URL}{model}:predict", json=data)
-    if response.status_code == 200:
-        # Response cleanup
-        response = response.json()['outputs']
-        for label in response:
-            response[label] = [parse(entry) for entry in response[label]]
+    currentid = request.sid
+    if currentid not in occupied_sockets:
+        occupied_sockets.add(currentid)
+        model, inputs = data["model"], data["input"]
+        emit('model_ack', dict(status="received", **acks["received"]))
+        inputs = clean(inputs)
+        emit('model_ack', dict(status="cleaned", inputs=inputs.replace("/n", "\n"), **acks["cleaned"]))
+        data = {"inputs": [inputs]}
+        response = requests.post(f"{MODEL_URL}{model}:predict", json=data)
+        if response.status_code == 200:
+            # Response cleanup
+            response = response.json()['outputs']
+            for label in response:
+                response[label] = [parse(entry) for entry in response[label]]
 
-        # Prepare socket emit
-        emit('model_response',  dict(status="success", **response, **acks["success"]))
-    else:
-        emit('model_response', dict(status="error", info=f"Model server returned {response.status_code}\nInfo: {response.content}", **acks["error"]))
+            # Prepare socket emit
+            emit('model_response',  dict(status="success", **response, **acks["success"]))
+        else:
+            emit('model_response', dict(status="error", info=f"Model server returned {response.status_code}\nInfo: {response.content}", **acks["error"]))
+        occupied_sockets.remove(currentid)
 
 if __name__ == "__main__":
     app.run(port=7000)

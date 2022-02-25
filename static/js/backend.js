@@ -1,3 +1,5 @@
+
+
 function getModels() {
     available_models.innerHTML=""
     fetch('/v1/models')
@@ -20,14 +22,17 @@ function getModels() {
                 available_models.appendChild(temp_model)
             }
         }
-      })
+    })
 }
 
 function getSummary(model, input) {
-    socket.emit('query', {
-        "model": model,
-        "input": input
-    });
+    if (socket_available) {
+        socket_available = false;
+        socket.emit('query', {
+            "model": model,
+            "input": input
+        });
+    }
 }
 
 socket.on('model_ack', function(data) {
@@ -65,8 +70,10 @@ socket.on('model_response', function(data) {
             console.log(data["info"])
             break;
     }
+    socket_available = true;
 });
 
 socket.on('connect', function() {
     console.log("CONNECTED")
+    // console.log(this)
 });
